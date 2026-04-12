@@ -1,6 +1,5 @@
 .page {
   min-height: 100vh;
-  background: #0f0f18;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8,24 +7,25 @@
 }
 
 .card {
-  background: #1a1a24;
-  border: 1.5px solid #2a2a3a;
-  border-radius: 20px;
-  padding: 40px 36px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 44px 40px;
   width: 100%;
   max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  backdrop-filter: blur(20px);
 }
 
 .logo {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 32px;
+  font-family: 'Syne', sans-serif;
+  font-size: 36px;
   font-weight: 800;
   color: #f0eef8;
-  letter-spacing: -0.5px;
+  letter-spacing: -1px;
   margin-bottom: 4px;
 }
 
@@ -39,38 +39,42 @@
 .tagline {
   font-size: 13px;
   color: #444458;
-  font-weight: 500;
-  margin-bottom: 16px;
+  font-weight: 600;
+  font-family: 'Nunito', sans-serif;
+  margin-bottom: 20px;
   text-align: center;
 }
 
 .tabs {
   display: flex;
-  background: #13131c;
-  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50px;
   padding: 4px;
   gap: 4px;
   width: 100%;
   margin-bottom: 8px;
+  border: 1px solid rgba(255,255,255,0.06);
 }
 
 .tab {
   flex: 1;
-  padding: 8px;
+  padding: 9px;
   border: none;
-  border-radius: 7px;
+  border-radius: 50px;
   background: none;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   color: #444458;
   cursor: pointer;
   transition: all 0.15s;
+  letter-spacing: 0.03em;
 }
 
 .tab.active {
-  background: #2a2a3a;
-  color: #f0eef8;
+  background: rgba(139, 92, 246, 0.2);
+  color: #c4b5fd;
+  border: 1px solid rgba(139,92,246,0.3);
 }
 
 .form {
@@ -89,51 +93,57 @@
 
 .label {
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-weight: 800;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #444458;
+  font-family: 'Syne', sans-serif;
 }
 
 .input {
-  background: #13131c;
-  border: 1.5px solid #2a2a3a;
-  border-radius: 10px;
-  padding: 12px 14px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: 'Nunito', sans-serif;
   font-size: 14px;
+  font-weight: 600;
   color: #f0eef8;
   outline: none;
   transition: border-color 0.15s;
   width: 100%;
+  backdrop-filter: blur(8px);
 }
 
 .input::placeholder { color: #333348; }
-.input:focus { border-color: #8B5CF6; }
+.input:focus { border-color: rgba(139, 92, 246, 0.6); }
 
 .error {
   font-size: 12px;
+  font-weight: 700;
   color: #F43F5E;
-  background: #2a1820;
-  border: 1px solid #4a2030;
-  border-radius: 8px;
-  padding: 8px 12px;
+  background: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+  border-radius: 10px;
+  padding: 10px 14px;
   text-align: center;
+  font-family: 'Nunito', sans-serif;
 }
 
 .submit {
   background: linear-gradient(135deg, #8B5CF6, #6366F1);
   color: #fff;
   border: none;
-  border-radius: 10px;
-  padding: 13px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  border-radius: 50px;
+  padding: 14px;
+  font-family: 'Syne', sans-serif;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   transition: opacity 0.15s, transform 0.1s;
   margin-top: 4px;
   width: 100%;
+  letter-spacing: 0.04em;
 }
 
 .submit:hover  { opacity: 0.88; }
@@ -141,18 +151,20 @@
 
 .switch {
   font-size: 12px;
+  font-weight: 600;
   color: #444458;
   margin-top: 4px;
   text-align: center;
+  font-family: 'Nunito', sans-serif;
 }
 
 .switchBtn {
   background: none;
   border: none;
   color: #8B5CF6;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Nunito', sans-serif;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
   transition: color 0.15s;
 }

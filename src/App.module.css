@@ -1,6 +1,5 @@
 .page {
   min-height: 100vh;
-  background: #0f0f18;
   padding: 32px 24px 48px;
 }
 
@@ -19,10 +18,11 @@
 }
 
 .logo {
-  font-size: 28px;
+  font-family: 'Syne', sans-serif;
+  font-size: 32px;
   font-weight: 800;
   color: #f0eef8;
-  letter-spacing: -0.5px;
+  letter-spacing: -1px;
 }
 
 .logo span {
@@ -33,37 +33,71 @@
 }
 
 .date {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: #555570;
+  margin-top: 4px;
+  letter-spacing: 0.05em;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.welcome {
   font-size: 13px;
-  color: #444458;
-  margin-top: 3px;
-  font-weight: 500;
+  color: #666680;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
 }
 
 .addBtn {
   background: linear-gradient(135deg, #8B5CF6, #6366F1);
   color: #fff;
   border: none;
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  border-radius: 50px;
+  padding: 10px 22px;
+  font-family: 'Syne', sans-serif;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
   transition: opacity 0.15s, transform 0.1s;
+  letter-spacing: 0.03em;
 }
 
 .addBtn:hover  { opacity: 0.88; }
 .addBtn:active { transform: scale(0.98); }
 
+.logoutBtn {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 50px;
+  padding: 8px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #555568;
+  cursor: pointer;
+  transition: all 0.15s;
+  backdrop-filter: blur(8px);
+}
+
+.logoutBtn:hover { border-color: #F43F5E; color: #F43F5E; }
+
 .banner {
-  background: linear-gradient(135deg, #8B5CF622, #14B8A622);
-  border: 1.5px solid #8B5CF644;
-  border-radius: 12px;
-  padding: 14px 20px;
+  background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(20,184,166,0.15));
+  border: 1px solid rgba(139,92,246,0.3);
+  border-radius: 16px;
+  padding: 16px 24px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 800;
+  font-family: 'Syne', sans-serif;
   color: #c4b5fd;
   text-align: center;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(8px);
 }
 
 .topRow {
@@ -74,13 +108,14 @@
 }
 
 .ringWrap {
-  background: #1a1a24;
-  border: 1.5px solid #2a2a3a;
-  border-radius: 16px;
-  padding: 20px 24px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 24px 28px;
   display: flex;
   align-items: center;
   gap: 20px;
+  backdrop-filter: blur(12px);
 }
 
 .ringLabel {
@@ -90,14 +125,17 @@
 }
 
 .ringTitle {
-  font-size: 13px;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
   font-weight: 700;
   color: #f0eef8;
+  letter-spacing: 0.02em;
 }
 
 .ringSub {
   font-size: 12px;
   color: #444458;
+  font-weight: 600;
 }
 
 .chartWrap { flex: 1; }
@@ -123,37 +161,11 @@
 .empty p {
   font-size: 15px;
   color: #444458;
-  font-weight: 500;
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
 }
 
 @media (max-width: 600px) {
   .topRow { grid-template-columns: 1fr; }
   .header { flex-direction: column; align-items: flex-start; gap: 12px; }
 }
-
-.headerRight {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.welcome {
-  font-size: 13px;
-  color: #666680;
-  font-weight: 600;
-}
-
-.logoutBtn {
-  background: none;
-  border: 1.5px solid #2a2a3a;
-  border-radius: 8px;
-  padding: 8px 14px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  color: #555568;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.logoutBtn:hover { border-color: #F43F5E; color: #F43F5E; }

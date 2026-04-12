@@ -5,8 +5,32 @@
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Nunito', sans-serif;
   background: #0f0f18;
   color: #f0eef8;
   -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse at 20% 10%, #8B5CF622 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 90%, #14B8A622 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 30%, #F43F5E11 0%, transparent 40%),
+    radial-gradient(ellipse at 10% 80%, #3B82F611 0%, transparent 40%);
+  background-attachment: fixed;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
 }
