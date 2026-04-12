@@ -1,0 +1,16 @@
+.wrap {
+  background: #1a1a24;
+  border: 1.5px solid #2a2a3a;
+  border-radius: 16px;
+  padding: 20px 20px 10px;
+}
+
+.title {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #444458;
+  margin-bottom: 12px;
+}
