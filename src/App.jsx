@@ -14,8 +14,8 @@ export default function App() {
   const [showForm, setShowForm] = useState(false)
   const { fire } = useConfetti()
   const {
-    habits, today, completedToday, totalHabits,
-    overallRate, toggleToday, addHabit, deleteHabit,
+  habits, today, completedToday, totalHabits,
+  overallRate, toggleToday, toggleDay, addHabit, deleteHabit,
   } = useHabits()
 
   const todayLabel = new Date().toLocaleDateString('en-US', {
@@ -99,6 +99,7 @@ export default function App() {
                 habit={habit}
                 today={today}
                 onToggle={toggleToday}
+                onToggleDay={toggleDay}
                 onDelete={deleteHabit}
               />
             ))}

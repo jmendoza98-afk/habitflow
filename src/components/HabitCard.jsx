@@ -7,7 +7,7 @@ import styles from './HabitCard.module.css'
 
 const ALL_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
-export function HabitCard({ habit, today, onToggle, onDelete }) {
+export function HabitCard({ habit, today, onToggle, onToggleDay, onDelete }) {
   const [showStats, setShowStats] = useState(false)
   const color  = COLOR_MAP[habit.color]
   const done   = !!habit.completions[today]
@@ -64,16 +64,17 @@ export function HabitCard({ habit, today, onToggle, onDelete }) {
           </div>
         )}
 
-        {/* Last 7 days dots */}
-        <div className={styles.dots}>
-          {last7.map(d => (
-            <div
-              key={d}
-              className={`${styles.dot} ${habit.completions[d] ? styles.dotFilled : ''}`}
-              title={d}
-            />
-          ))}
-        </div>
+        {/* Last 7 days dots — clickable */}
+      <div className={styles.dots}>
+  {last7.map(d => (
+    <div
+      key={d}
+      className={`${styles.dot} ${habit.completions[d] ? styles.dotFilled : ''} ${styles.dotClickable}`}
+      title={`${d} — click to toggle`}
+      onClick={() => onToggleDay(habit.id, d)}
+    />
+      ))}
+    </div>
 
         <div className={styles.stats}>
           <div className={styles.stat}>

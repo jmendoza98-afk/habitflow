@@ -77,13 +77,17 @@ export function useHabits() {
     })
   }, [])
 
-  const toggleToday = useCallback((id) => {
-    updateHabits(prev => prev.map(h => {
-      if (h.id !== id) return h
-      const current = !!h.completions[today]
-      return { ...h, completions: { ...h.completions, [today]: !current } }
-    }))
-  }, [today, updateHabits])
+  const toggleDay = useCallback((id, date) => {
+  updateHabits(prev => prev.map(h => {
+    if (h.id !== id) return h
+    const current = !!h.completions[date]
+    return { ...h, completions: { ...h.completions, [date]: !current } }
+  }))
+}, [updateHabits])
+
+const toggleToday = useCallback((id) => {
+  toggleDay(id, today)
+}, [today, toggleDay])
 
   const addHabit = useCallback((data) => {
     const habit = {
@@ -113,6 +117,7 @@ export function useHabits() {
     completedToday,
     totalHabits,
     overallRate,
+    toggleDay,
     toggleToday,
     addHabit,
     deleteHabit,

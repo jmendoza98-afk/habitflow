@@ -211,3 +211,13 @@
 }
 
 .statsBtn:hover { opacity: 1; transform: scale(1.1); }
+
+.dotClickable {
+  cursor: pointer;
+  transition: transform 0.15s, opacity 0.15s;
+}
+
+.dotClickable:hover {
+  transform: scaleY(1.6);
+  opacity: 0.8;
+}
