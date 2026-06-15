@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useHabits } from './hooks/useHabits'
 import { useAuth } from './hooks/useAuth'
+import { useConfetti } from './components/Confetti'
 import { HabitCard } from './components/HabitCard'
 import { AddHabitForm } from './components/AddHabitForm'
 import { WeekChart } from './components/WeekChart'
@@ -11,6 +12,7 @@ import styles from './App.module.css'
 export default function App() {
   const { currentUser, error, setError, signup, login, logout } = useAuth()
   const [showForm, setShowForm] = useState(false)
+  const { fire } = useConfetti()
   const {
     habits, today, completedToday, totalHabits,
     overallRate, toggleToday, addHabit, deleteHabit,
@@ -21,6 +23,11 @@ export default function App() {
   })
 
   const allDone = totalHabits > 0 && completedToday === totalHabits
+
+  // Fire confetti when all habits are done
+  useEffect(() => {
+    if (allDone) fire()
+  }, [allDone])
 
   if (!currentUser) {
     return (
@@ -37,7 +44,6 @@ export default function App() {
     <div className={styles.page}>
       <div className={styles.container}>
 
-        {/* Header */}
         <div className={styles.header}>
           <div>
             <h1 className={styles.logo}>habit<span>flow</span></h1>
@@ -54,20 +60,22 @@ export default function App() {
           </div>
         </div>
 
-        {/* Today banner */}
         {allDone && (
           <div className={styles.banner}>
             🎉 All habits complete for today — great work!
           </div>
         )}
 
-        {/* Top row */}
         <div className={styles.topRow}>
           <div className={styles.ringWrap}>
             <ProgressRing pct={overallRate} completed={completedToday} total={totalHabits} />
             <div className={styles.ringLabel}>
               <span className={styles.ringTitle}>Today's Progress</span>
-              <span className={styles.ringSub}>Keep it up!</span>
+              <span className={styles.ringSub}>
+                {completedToday === 0 && 'Let\'s get started!'}
+                {completedToday > 0 && completedToday < totalHabits && 'Keep it up!'}
+                {allDone && 'You crushed it! 🔥'}
+              </span>
             </div>
           </div>
           <div className={styles.chartWrap}>
@@ -75,7 +83,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* Habit grid */}
         {habits.length === 0 ? (
           <div className={styles.empty}>
             <span className={styles.emptyEmoji}>🌱</span>
