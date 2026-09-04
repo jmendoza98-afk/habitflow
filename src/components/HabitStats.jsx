@@ -2,46 +2,47 @@ import { COLOR_MAP, pastDays } from '../data/habits'
 import { calcStreak, calcRate } from '../hooks/useHabits'
 import styles from './HabitStats.module.css'
 
-function getHeatmapData(completions) {
-  const days = pastDays(90)
-  return days.map(date => ({
+// builds the 90-day grid data
+function getHeatmap(completions) {
+  return pastDays(90).map(date => ({
     date,
     done: !!completions[date],
-    month: new Date(date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short' }),
     day: new Date(date + 'T00:00:00').getDate(),
   }))
+}
+
+// chunk flat array into rows of 7
+function toWeeks(days) {
+  const weeks = []
+  let week = []
+  days.forEach((d, i) => {
+    week.push(d)
+    if (week.length === 7 || i === days.length - 1) {
+      weeks.push(week)
+      week = []
+    }
+  })
+  return weeks
+}
+
+function getBestStreak(heatmap) {
+  let best = 0
+  let cur  = 0
+  heatmap.forEach(d => {
+    cur  = d.done ? cur + 1 : 0
+    best = Math.max(best, cur)
+  })
+  return best
 }
 
 export function HabitStats({ habit, onClose }) {
   const color   = COLOR_MAP[habit.color]
   const streak  = calcStreak(habit.completions)
   const rate    = calcRate(habit.completions)
-  const heatmap = getHeatmapData(habit.completions)
-
-  // Group by weeks for the calendar grid
-  const weeks = []
-  let week = []
-  heatmap.forEach((day, i) => {
-    week.push(day)
-    if (week.length === 7 || i === heatmap.length - 1) {
-      weeks.push(week)
-      week = []
-    }
-  })
-
-  // Best streak
-  let bestStreak = 0
-  let current = 0
-  heatmap.forEach(d => {
-    if (d.done) {
-      current++
-      bestStreak = Math.max(bestStreak, current)
-    } else {
-      current = 0
-    }
-  })
-
-  const totalDone = heatmap.filter(d => d.done).length
+  const heatmap = getHeatmap(habit.completions)
+  const weeks   = toWeeks(heatmap)
+  const best    = getBestStreak(heatmap)
+  const total   = heatmap.filter(d => d.done).length
 
   return (
     <div className={styles.overlay} onClick={e => e.target === e.currentTarget && onClose()}>
@@ -58,27 +59,22 @@ export function HabitStats({ habit, onClose }) {
           <button className={styles.close} onClick={onClose}>✕</button>
         </div>
 
-        {/* Stat pills */}
+        {/* 4 stat pills */}
         <div className={styles.stats}>
-          <div className={styles.stat} style={{ background: `${color.hex}18`, borderColor: `${color.hex}33` }}>
-            <span className={styles.statVal} style={{ color: color.hex }}>{streak}</span>
-            <span className={styles.statLabel}>Current Streak</span>
-          </div>
-          <div className={styles.stat} style={{ background: `${color.hex}18`, borderColor: `${color.hex}33` }}>
-            <span className={styles.statVal} style={{ color: color.hex }}>{bestStreak}</span>
-            <span className={styles.statLabel}>Best Streak</span>
-          </div>
-          <div className={styles.stat} style={{ background: `${color.hex}18`, borderColor: `${color.hex}33` }}>
-            <span className={styles.statVal} style={{ color: color.hex }}>{rate}%</span>
-            <span className={styles.statLabel}>30-Day Rate</span>
-          </div>
-          <div className={styles.stat} style={{ background: `${color.hex}18`, borderColor: `${color.hex}33` }}>
-            <span className={styles.statVal} style={{ color: color.hex }}>{totalDone}</span>
-            <span className={styles.statLabel}>Total Days</span>
-          </div>
+          {[
+            { label: 'Current Streak', val: streak },
+            { label: 'Best Streak',    val: best   },
+            { label: '30-Day Rate',    val: `${rate}%` },
+            { label: 'Total Days',     val: total  },
+          ].map(s => (
+            <div key={s.label} className={styles.stat} style={{ background: `${color.hex}18`, borderColor: `${color.hex}33` }}>
+              <span className={styles.statVal} style={{ color: color.hex }}>{s.val}</span>
+              <span className={styles.statLabel}>{s.label}</span>
+            </div>
+          ))}
         </div>
 
-        {/* Heatmap */}
+        {/* 90 day heatmap */}
         <div className={styles.heatmapSection}>
           <span className={styles.heatmapTitle}>Last 90 Days</span>
           <div className={styles.heatmap}>
@@ -89,7 +85,7 @@ export function HabitStats({ habit, onClose }) {
                     key={di}
                     className={`${styles.cell} ${day.done ? styles.cellDone : ''}`}
                     style={day.done ? { background: color.hex } : {}}
-                    title={`${day.date} — ${day.done ? '✓ Done' : '✗ Missed'}`}
+                    title={`${day.date} — ${day.done ? '✓' : '✗'}`}
                   />
                 ))}
               </div>
@@ -98,16 +94,15 @@ export function HabitStats({ habit, onClose }) {
           <div className={styles.heatmapLegend}>
             <span>Less</span>
             <div className={styles.legendDots}>
-              <div className={styles.legendDot} style={{ background: 'rgba(255,255,255,0.06)' }} />
-              <div className={styles.legendDot} style={{ background: `${color.hex}44` }} />
-              <div className={styles.legendDot} style={{ background: `${color.hex}88` }} />
-              <div className={styles.legendDot} style={{ background: color.hex }} />
+              {['06', '44', '88', 'ff'].map(op => (
+                <div key={op} className={styles.legendDot} style={{ background: op === '06' ? 'rgba(255,255,255,0.06)' : `${color.hex}${op}` }} />
+              ))}
             </div>
             <span>More</span>
           </div>
         </div>
 
-        {/* Scheduled days */}
+        {/* scheduled days */}
         {habit.scheduledDays && (
           <div className={styles.scheduledSection}>
             <span className={styles.heatmapTitle}>Scheduled Days</span>
