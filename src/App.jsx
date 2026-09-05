@@ -13,9 +13,10 @@ export default function App() {
   const { currentUser, error, setError, signup, login, logout } = useAuth()
   const [showForm, setShowForm] = useState(false)
   const { fire } = useConfetti()
+
   const {
-  habits, today, completedToday, totalHabits,
-  overallRate, toggleToday, toggleDay, addHabit, deleteHabit,
+    habits, today, completedToday, totalHabits,
+    overallRate, toggleToday, toggleDay, addHabit, deleteHabit,
   } = useHabits()
 
   const todayLabel = new Date().toLocaleDateString('en-US', {
@@ -24,20 +25,13 @@ export default function App() {
 
   const allDone = totalHabits > 0 && completedToday === totalHabits
 
-  // Fire confetti when all habits are done
+  // fire confetti when everything is checked off
   useEffect(() => {
     if (allDone) fire()
   }, [allDone])
 
   if (!currentUser) {
-    return (
-      <AuthPage
-        onLogin={login}
-        onSignup={signup}
-        error={error}
-        setError={setError}
-      />
-    )
+    return <AuthPage onLogin={login} onSignup={signup} error={error} setError={setError} />
   }
 
   return (
@@ -51,12 +45,8 @@ export default function App() {
           </div>
           <div className={styles.headerRight}>
             <span className={styles.welcome}>👋 {currentUser}</span>
-            <button className={styles.addBtn} onClick={() => setShowForm(true)}>
-              + New Habit
-            </button>
-            <button className={styles.logoutBtn} onClick={logout}>
-              Log out
-            </button>
+            <button className={styles.addBtn} onClick={() => setShowForm(true)}>+ New Habit</button>
+            <button className={styles.logoutBtn} onClick={logout}>Log out</button>
           </div>
         </div>
 
@@ -72,7 +62,7 @@ export default function App() {
             <div className={styles.ringLabel}>
               <span className={styles.ringTitle}>Today's Progress</span>
               <span className={styles.ringSub}>
-                {completedToday === 0 && 'Let\'s get started!'}
+                {completedToday === 0 && "Let's get started!"}
                 {completedToday > 0 && completedToday < totalHabits && 'Keep it up!'}
                 {allDone && 'You crushed it! 🔥'}
               </span>
@@ -87,9 +77,7 @@ export default function App() {
           <div className={styles.empty}>
             <span className={styles.emptyEmoji}>🌱</span>
             <p>No habits yet — add your first one!</p>
-            <button className={styles.addBtn} onClick={() => setShowForm(true)}>
-              + New Habit
-            </button>
+            <button className={styles.addBtn} onClick={() => setShowForm(true)}>+ New Habit</button>
           </div>
         ) : (
           <div className={styles.grid}>
@@ -108,9 +96,7 @@ export default function App() {
 
       </div>
 
-      {showForm && (
-        <AddHabitForm onAdd={addHabit} onClose={() => setShowForm(false)} />
-      )}
+      {showForm && <AddHabitForm onAdd={addHabit} onClose={() => setShowForm(false)} />}
     </div>
   )
 }

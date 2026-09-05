@@ -3,10 +3,9 @@ import { COLORS } from '../data/habits'
 import styles from './AddHabitForm.module.css'
 
 const EMOJIS = ['🏃', '📚', '🧘', '💧', '📵', '🥗', '💪', '✍️', '🎯', '🎨', '🎵', '🛌', '🚴', '🧠', '💊']
+const DAYS   = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
-const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-
-const EMPTY = {
+const empty = {
   name: '',
   description: '',
   color: 'violet',
@@ -15,21 +14,24 @@ const EMPTY = {
 }
 
 export function AddHabitForm({ onAdd, onClose }) {
-  const [form, setForm] = useState(EMPTY)
+  const [form, setForm] = useState(empty)
   const [error, setError] = useState('')
 
-  function set(field, value) {
+  const selectedColor = COLORS.find(c => c.id === form.color)
+
+  function update(field, value) {
     setForm(prev => ({ ...prev, [field]: value }))
     setError('')
   }
 
   function toggleDay(day) {
     setForm(prev => {
-      const already = prev.scheduledDays.includes(day)
-      if (already && prev.scheduledDays.length === 1) return prev
+      const has = prev.scheduledDays.includes(day)
+      // don't let them deselect the last day
+      if (has && prev.scheduledDays.length === 1) return prev
       return {
         ...prev,
-        scheduledDays: already
+        scheduledDays: has
           ? prev.scheduledDays.filter(d => d !== day)
           : [...prev.scheduledDays, day],
       }
@@ -38,24 +40,24 @@ export function AddHabitForm({ onAdd, onClose }) {
 
   function handleSubmit(e) {
     e.preventDefault()
-    if (!form.name.trim()) return setError('Please enter a habit name.')
-    if (form.scheduledDays.length === 0) return setError('Select at least one day.')
+    if (!form.name.trim()) return setError('Give your habit a name.')
+    if (!form.scheduledDays.length) return setError('Pick at least one day.')
     onAdd(form)
-    setForm(EMPTY)
+    setForm(empty)
     onClose()
   }
-
-  const selectedColor = COLORS.find(c => c.id === form.color)
 
   return (
     <div className={styles.overlay} onClick={e => e.target === e.currentTarget && onClose()}>
       <div className={styles.modal} style={{ '--color': selectedColor?.hex }}>
+
         <div className={styles.header}>
           <h2 className={styles.title}>New Habit</h2>
           <button className={styles.close} onClick={onClose}>✕</button>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
+
           <div className={styles.field}>
             <label className={styles.label}>Icon</label>
             <div className={styles.emojis}>
@@ -64,7 +66,7 @@ export function AddHabitForm({ onAdd, onClose }) {
                   key={e}
                   type="button"
                   className={`${styles.emojiBtn} ${form.emoji === e ? styles.emojiActive : ''}`}
-                  onClick={() => set('emoji', e)}
+                  onClick={() => update('emoji', e)}
                 >
                   {e}
                 </button>
@@ -73,12 +75,12 @@ export function AddHabitForm({ onAdd, onClose }) {
           </div>
 
           <div className={styles.field}>
-            <label className={styles.label}>Habit Name</label>
+            <label className={styles.label}>Name</label>
             <input
               className={styles.input}
               placeholder="e.g. Morning Run"
               value={form.name}
-              onChange={e => set('name', e.target.value)}
+              onChange={e => update('name', e.target.value)}
             />
           </div>
 
@@ -88,12 +90,12 @@ export function AddHabitForm({ onAdd, onClose }) {
               className={styles.input}
               placeholder="e.g. 30 minutes outside"
               value={form.description}
-              onChange={e => set('description', e.target.value)}
+              onChange={e => update('description', e.target.value)}
             />
           </div>
 
           <div className={styles.field}>
-            <label className={styles.label}>Scheduled Days</label>
+            <label className={styles.label}>Days</label>
             <div className={styles.days}>
               {DAYS.map(day => (
                 <button
@@ -117,7 +119,7 @@ export function AddHabitForm({ onAdd, onClose }) {
                   type="button"
                   className={`${styles.colorBtn} ${form.color === c.id ? styles.colorActive : ''}`}
                   style={{ background: c.hex }}
-                  onClick={() => set('color', c.id)}
+                  onClick={() => update('color', c.id)}
                   title={c.label}
                 />
               ))}
@@ -126,9 +128,8 @@ export function AddHabitForm({ onAdd, onClose }) {
 
           {error && <p className={styles.error}>{error}</p>}
 
-          <button type="submit" className={styles.submit}>
-            Add Habit
-          </button>
+          <button type="submit" className={styles.submit}>Add Habit</button>
+
         </form>
       </div>
     </div>
