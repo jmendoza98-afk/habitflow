@@ -21,7 +21,7 @@ function getNextId(habits) {
   return habits.length > 0 ? Math.max(...habits.map(h => h.id)) + 1 : 1
 }
 
-// current streak — counts back from today until a miss
+// counts back from today until there's a missed day
 export function calcStreak(completions) {
   let streak = 0
   const today = new Date()
@@ -35,18 +35,19 @@ export function calcStreak(completions) {
   return streak
 }
 
-// what % of the last 30 days were completed
+// % of last 30 days completed
 export function calcRate(completions) {
   const days = pastDays(30)
   const done = days.filter(d => completions[d]).length
   return Math.round((done / 30) * 100)
 }
 
-// data for the weekly bar chart
+// data for the weekly bar chart — uses noon to avoid timezone edge cases
 export function weekData(habits) {
   return pastDays(7).map(date => {
-    const dayName = DAY_NAMES[new Date(date + 'T00:00:00').getDay()]
-    const label   = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short' })
+    const d         = new Date(date + 'T12:00:00')
+    const dayName   = DAY_NAMES[d.getDay()]
+    const label     = d.toLocaleDateString('en-US', { weekday: 'short' })
     const scheduled = habits.filter(h => !h.scheduledDays || h.scheduledDays.includes(dayName))
     const count     = scheduled.filter(h => h.completions[date]).length
     return { date, label, count, total: scheduled.length }
@@ -58,9 +59,10 @@ export function useHabits() {
   const nextId = useRef(getNextId(load()))
 
   const today    = todayStr()
-  const todayDay = DAY_NAMES[new Date().getDay()]
+  const now      = new Date()
+  const todayDay = DAY_NAMES[now.getDay()]
 
-  // only show habits scheduled for today
+  // only habits scheduled for today show up on the main screen
   const todayHabits = habits.filter(h =>
     !h.scheduledDays || h.scheduledDays.includes(todayDay)
   )
@@ -73,11 +75,12 @@ export function useHabits() {
     })
   }
 
+  // toggle any specific date — used by the clickable dots
   const toggleDay = useCallback((id, date) => {
     updateHabits(prev => prev.map(h => {
       if (h.id !== id) return h
-      const current = !!h.completions[date]
-      return { ...h, completions: { ...h.completions, [date]: !current } }
+      const was = !!h.completions[date]
+      return { ...h, completions: { ...h.completions, [date]: !was } }
     }))
   }, [])
 

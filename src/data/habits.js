@@ -15,13 +15,21 @@ export const COLOR_MAP = Object.fromEntries(COLORS.map(c => [c.id, c]))
 export function pastDays(n) {
   return Array.from({ length: n }, (_, i) => {
     const d = new Date()
+    d.setHours(12, 0, 0, 0) // lock to noon to avoid timezone drift
     d.setDate(d.getDate() - (n - 1 - i))
-    return d.toISOString().slice(0, 10)
+    const year  = d.getFullYear()
+    const month = String(d.getMonth() + 1).padStart(2, '0')
+    const day   = String(d.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
   })
 }
 
 export function todayStr() {
-  return new Date().toISOString().slice(0, 10)
+  const d = new Date()
+  const year  = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day   = String(d.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
 }
 
 // Generate random completions for seed data
